@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 开发配置
 
-Things you may want to cover:
+### 数据库创建，在 cmd 里运行
 
-* Ruby version
+```
+docker run -d      --name db-for-peach      -e POSTGRES_USER=peach      -e POSTGRES_PASSWORD=123456      -e POSTGRES_DB=peach_dev      -e PGDATA=/var/lib/postgresql/data/pgdata      -v peach-data:/var/lib/postgresql/data      --network=network1      postgres:14
+```
 
-* System dependencies
+或者使用
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+docker start db-for-peach
+```
