@@ -1,4 +1,4 @@
-class Api::V1::ItmesController < ApplicationController
+class Api::V1::ItemsController < ApplicationController
   def index
     items = Item.page params[:page]
     render json: { resources: items }
