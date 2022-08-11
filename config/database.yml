@@ -60,6 +60,7 @@ test:
 #
 production:
   <<: *default
-  database: peach_1_production
-  username: peach_1
-  password: <%= ENV["PEACH_1_DATABASE_PASSWORD"] %>
+  database: peach_production
+  username: peach
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV["DB_HOST"] %>
