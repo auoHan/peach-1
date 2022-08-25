@@ -5,8 +5,8 @@ RSpec.describe "Mes", type: :request do
   include ActiveSupport::Testing::TimeHelpers
   describe "获取当前用户" do
     it "登录后成功获取" do
-      user = User.create email: "710543q268@qq.com"
-      post "/api/v1/session", params: { email: "710543q268@qq.com", code: "123456" }
+      user = User.create email: "710543268@qq.com"
+      post "/api/v1/session", params: { email: "710543268@qq.com", code: "123456" }
       expect(response).to have_http_status(200)
       json = JSON.parse response.body
       jwt = json["jwt"]
