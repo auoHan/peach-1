@@ -132,7 +132,7 @@ RSpec.describe "Api::V1::Tags", type: :request do
     it "登录后删除别人的标签" do
       user = create :user
       other = create :user
-      tag = create :tag, user: user
+      tag = create :tag, user: other
       delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
       expect(response).to have_http_status(403)
     end
