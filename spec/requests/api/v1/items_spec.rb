@@ -84,7 +84,7 @@ RSpec.describe "Items", type: :request do
       tag1 = Tag.create name: "tag1", sign: "x", user_id: user.id
       tag2 = Tag.create name: "tag2", sign: "x", user_id: user.id
       expect {
-        post "/api/v1/items", params: { amount: 99, tags_id: [tag1.id, tag2.id],
+        post "/api/v1/items", params: { amount: 99, tag_ids: [tag1.id, tag2.id],
                                         happen_at: "2018-01-01T00:00:00+08:00" },
                               headers: user.generate_auth_header
       }.to change { Item.count }.by 1
@@ -95,13 +95,13 @@ RSpec.describe "Items", type: :request do
       expect(json["resource"]["user_id"]).to eq user.id
       expect(json["resource"]["happen_at"]).to eq "2017-12-31T16:00:00.000Z"
     end
-    it "创建时 amount、tags_id、happen_at 必填" do
+    it "创建时 amount、tag_ids、happen_at 必填" do
       user = User.create email: "1@qq.com"
       post "/api/v1/items", params: {}, headers: user.generate_auth_header
       expect(response).to have_http_status 422
       json = JSON.parse response.body
       expect(json["errors"]["amount"][0]).to eq "can't be blank"
-      expect(json["errors"]["tags_id"][0]).to eq "can't be blank"
+      expect(json["errors"]["tag_ids"][0]).to eq "can't be blank"
       expect(json["errors"]["happen_at"][0]).to eq "can't be blank"
     end
   end
@@ -109,18 +109,18 @@ RSpec.describe "Items", type: :request do
     it "按天分组" do
       user = User.create! email: "1@qq.com"
       tag = Tag.create! name: "tag1", sign: "x", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
       get "/api/v1/items/summary", params: {
-                                 happened_after: "2018-01-01",
-                                 happened_before: "2019-01-01",
-                                 kind: "expenses",
-                                 group_by: "happen_at",
-                               }, headers: user.generate_auth_header
+                                     happened_after: "2018-01-01",
+                                     happened_before: "2019-01-01",
+                                     kind: "expenses",
+                                     group_by: "happen_at",
+                                   }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse response.body
       expect(json["groups"].size).to eq 3
@@ -137,15 +137,15 @@ RSpec.describe "Items", type: :request do
       tag1 = Tag.create! name: "tag1", sign: "x", user_id: user.id
       tag2 = Tag.create! name: "tag2", sign: "x", user_id: user.id
       tag3 = Tag.create! name: "tag3", sign: "x", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 300, kind: "expenses", tags_id: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 300, kind: "expenses", tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
       get "/api/v1/items/summary", params: {
-                                 happened_after: "2018-01-01",
-                                 happened_before: "2019-01-01",
-                                 kind: "expenses",
-                                 group_by: "tag_id",
-                               }, headers: user.generate_auth_header
+                                     happened_after: "2018-01-01",
+                                     happened_before: "2019-01-01",
+                                     kind: "expenses",
+                                     group_by: "tag_id",
+                                   }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse response.body
       expect(json["groups"].size).to eq 3
