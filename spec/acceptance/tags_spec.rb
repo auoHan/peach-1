@@ -3,7 +3,7 @@ require "rspec_api_documentation/dsl"
 
 resource "标签" do
   authentication :basic, :auth
-  let(:current_user) { User.create email: "1@qq.com" }
+  let(:current_user) { create :user }
   let(:auth) { "Bearer #{current_user.generate_jwt}" }
   get "/api/v1/tags/:id" do
     let (:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
@@ -24,7 +24,7 @@ resource "标签" do
   end
   get "/api/v1/tags" do
     parameter :page, "页码"
-    parameter :kind, '类型', in: ['expenses', 'income']
+    parameter :kind, "类型", in: ["expenses", "income"]
     with_options :scope => :resources do
       response_field :id, "ID"
       response_field :name, "名称"
