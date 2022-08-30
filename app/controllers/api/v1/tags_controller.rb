@@ -7,7 +7,7 @@ class Api::V1::TagsController < ApplicationController
     render json: { resources: tags, pager: {
       page: params[:page] || 1,
       per_page: Tag.default_per_page,
-      count: Tag.count,
+      count: Tags.count,
     } }
   end
 
@@ -46,7 +46,7 @@ class Api::V1::TagsController < ApplicationController
     tag.deleted_at = Time.now
     ActiveRecord::Base.transaction do
       begin
-        Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id])
+        Item.where("tag_ids && ARRAY[?]::bigint[]", [tag.id])
             .update!(deleted_at: Time.now)
         tag.save!
       rescue
