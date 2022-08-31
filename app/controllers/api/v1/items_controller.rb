@@ -66,7 +66,13 @@ class Api::V1::ItemsController < ApplicationController
       end
     end
     groups = hash
-      .map { |key, value| { "#{params[:group_by]}": key, tag: tags.find { |tag| tag.id == key }, amount: value } }
+      .map { |key, value|
+      {
+        "#{params[:group_by]}": key,
+        tag: tags.find { |tag| tag.id == key },
+        amount: value,
+      }
+    }
     if params[:group_by] == "happen_at"
       groups.sort! { |a, b| a[:happen_at] <=> b[:happen_at] }
     elsif params[:group_by] == "tag_id"
