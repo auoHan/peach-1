@@ -11,7 +11,7 @@ class Api::V1::ItemsController < ApplicationController
     render json: { resources: items, pager: {
       page: params[:page] || 1,
       per_page: Item.default_per_page,
-      count: Items.count,
+      count: items.count,
     } }, methods: :tags
   end
 
