@@ -1,6 +1,6 @@
 # 注意修改 user 和 ip
 user=peach
-ip=47.92.55.145
+ip=47.92.133.1
 
 time=$(date +'%Y%m%d-%H%M%S')
 cache_dir=tmp/deploy_cache
